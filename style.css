@@ -1,19 +1,68 @@
-*{box-sizing:border-box}html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
-body{background:#0b1020;color:#e6e8ef;display:flex;flex-direction:column}
-header,footer{padding:8px 14px;background:#0f1530}
-h1{font-size:18px;margin:8px 0}
-main{display:flex;flex-direction:column;gap:10px;padding:10px;max-width:1200px;width:100%;margin:0 auto}
-controls{display:flex;flex-direction:column;gap:8px;background:#101735;border:1px solid #1e2a55;border-radius:12px;padding:10px}
-.controls .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-label{font-size:14px;opacity:.9}
-input[type=text],input[type=number]{flex:1 1 360px;min-width:280px;background:#0e1330;border:1px solid #29346e;color:#e6e8ef;padding:8px 10px;border-radius:10px;outline:none}
-button{border:1px solid #2a3877;background:#17235a;color:#e6e8ef;padding:8px 12px;border-radius:10px;cursor:pointer}
-button.primary{background:#1d8cf8;border-color:#1d8cf8;color:white}
-button.secondary{background:#2a3877}
-button.danger{background:#8b1e3f;border-color:#ad2f59}
-button:hover{filter:brightness(1.1)}
-.player{display:flex;min-height:40vh}
-video{width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;border:1px solid #1e2a55}
-#status{font-size:12px;opacity:.85}
-.chk{display:flex;align-items:center;gap:8px}
-code{background:#0f1738;padding:2px 6px;border-radius:6px;border:1px solid #22306b}
+/* Fullpage flexible layout, zéro déco intrusive */
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; background:#000; color:#eaeaea; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; }
+
+/* Surface vidéo plein écran */
+#stage {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* garde les proportions, s’adapte partout */
+  background: #000;
+}
+
+/* Barre de contrôle : masquée, slide down on hotzone */
+.controls {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  transform: translateY(-100%);
+  transition: transform .18s ease-in-out, background-color .18s ease-in-out;
+  background: rgba(10,10,10,0.88);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 5;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.controls.show { transform: translateY(0%); }
+
+.controls-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px 14px;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+}
+.row { display: grid; gap: 6px; }
+.row input[type="text"], .row input[readonly] {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  color: #f3f3f3;
+  border-radius: 8px;
+  outline: none;
+}
+.toggle { display: inline-flex; align-items: center; gap: 8px; user-select: none; }
+.status { opacity: .8; font-size: .9rem; }
+
+/* Hotzone: bande de 8px tout en haut qui, au survol, affiche les contrôles */
+#hotzone {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 8px;
+  z-index: 6;
+}
+
+/* Accessibilité tactile: au tap sur le haut, montrer brièvement la barre */
+@media (pointer: coarse) {
+  #hotzone { height: 14px; }
+}

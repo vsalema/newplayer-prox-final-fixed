@@ -2,50 +2,34 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>NewPlayer — HLS Auto-Track</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Player M3U8 — AutoFollow</title>
   <link rel="stylesheet" href="style.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script>
-  <script defer src="config.js"></script>
-  <script defer src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js" defer></script>
+  <script src="poll-latest.js" defer></script>
 </head>
 <body>
-  <header>
-    <h1>NewPlayer — HLS m3u8</h1>
+  <!-- Barre de contrôle masquée par défaut, visible quand la souris touche le haut -->
+  <header id="controls" class="controls">
+    <div class="controls-inner">
+      <label class="row">
+        <span>URL m3u8 (lecture seule — suivie automatiquement)</span>
+        <input id="m3u8Input" placeholder="https://.../playlist.m3u8?token=..." readonly />
+      </label>
+      <label class="row toggle">
+        <input type="checkbox" id="autoFollow" checked />
+        <span>Suivre automatiquement</span>
+      </label>
+      <span id="status" class="status">—</span>
+    </div>
   </header>
 
-  <main>
-    <section class="controls">
-      <div class="row">
-        <label for="inputUrl">URL m3u8</label>
-        <input id="inputUrl" type="text" placeholder="https://.../playlist.m3u8?token=..." autocomplete="off" />
-        <button id="btnPlay" class="primary">Lire</button>
-      </div>
+  <!-- Hotzone pour provoquer l’affichage du header au survol du haut -->
+  <div id="hotzone"></div>
 
-      <div class="row">
-        <label for="pollMs">Polling (ms)</label>
-        <input id="pollMs" type="number" min="5000" step="1000" />
-        <label class="chk">
-          <input id="autoTrack" type="checkbox" />
-          Suivre automatiquement <code>data/latest.json</code>
-        </label>
-        <button id="btnForceRefresh">Forcer rechargement</button>
-      </div>
-
-      <div class="row">
-        <button id="btnSave" class="secondary">Enregistrer config locale</button>
-        <button id="btnReset" class="danger">Réinitialiser</button>
-        <span id="status"></span>
-      </div>
-    </section>
-
-    <section class="player">
-      <video id="video" controls playsinline></video>
-    </section>
+  <!-- Surface vidéo plein écran flexible -->
+  <main id="stage">
+    <video id="player" class="video" controls playsinline></video>
   </main>
-
-  <footer>
-    <small>Tout en même origine. Aucun contournement CORS. URLs relatives uniquement.</small>
-  </footer>
 </body>
 </html>
